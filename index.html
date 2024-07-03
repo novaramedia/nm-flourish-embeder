@@ -1,0 +1,64 @@
+<html>
+  <head>
+      <title>Novara Media</title>
+  </head>
+  <body>
+    <div id="input" style="display: none">
+      <input type="url" id="input__code" placeholder="Enter you flourish embed code" />
+      <button id="submit">Create page</button>
+    </div>
+
+    <div class="output" style="display: none;">
+    </div>
+
+    <script type="text/javascript">
+      const flourishInsert = (embed_code) => {
+        const insert = `<div class="flourish-embed" data-src="${embed_code}" data-width="1920px" data-height="1080px"></div>`;
+        
+        return insert;
+      }
+
+      const enableFlourish = () => {
+        const flourishScript = document.createElement('script');
+        flourishScript.src = 'https://public.flourish.studio/resources/embed.js';
+        flourishScript.async = true;
+        document.body.appendChild(flourishScript);
+      }
+
+      const setUrl = (embed_code) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('embed_code', embed_code);
+        window.location.search = urlParams.toString();
+      }
+
+      const example = 'story/2461222';
+
+      const input = document.getElementById('input');
+      const input_code = document.getElementById('input__code');
+      const submit = document.getElementById('submit');
+      const output = document.querySelector('.output');
+      const outputIframe = document.querySelector('.output__iframe');
+
+      // get the url from the query string
+      const urlParams = new URLSearchParams(window.location.search);
+      const embed_code = urlParams.get('embed_code');
+
+      if (embed_code) {
+        output.innerHTML = flourishInsert(embed_code);
+        output.style.display = 'block';
+        enableFlourish();
+      } else {
+        input.style.display = 'block';
+      }
+
+      submit.addEventListener('click', () => {
+        const embed_code = input_code.value;
+        output.innerHTML = flourishInsert(embed_code);
+        setUrl(embed_code);
+        output.style.display = 'block';
+        enableFlourish();
+        input.style.display = 'none';
+      });
+    </script>
+  </body>
+</html>
